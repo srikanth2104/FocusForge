@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FocusForge - Stats</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/app.css">
+
+</head>
+<body>
+
+<div class="container">
+
+    <aside class="sidebar">
+        <h2 class="logo">FocusForge</h2>
+        <nav>
+            <ul>
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="tasks.html">Tasks</a></li>
+                <li><a href="habits.html">Habits</a></li>
+                <li><a href="stats.html" class="active">Stats</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header>
+            <h1>Productivity Stats</h1>
+            <button id="darkModeToggle">🌙</button>
+        </header>
+
+        <div class="stats-summary">
+            <p>Total Tasks: <span id="totalTasks">0</span></p>
+            <p>Completed Tasks: <span id="completedTasks">0</span></p>
+            <p>Pending Tasks: <span id="pendingTasks">0</span></p>
+            <p>Total Focus Minutes: <span id="totalFocus">0</span></p>
+            <p>Total Habit Streak: <span id="totalStreak">0</span></p>
+        </div>
+
+        <canvas id="statsChart" width="400" height="200"></canvas>
+
+    </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

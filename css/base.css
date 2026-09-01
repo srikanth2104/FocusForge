@@ -1,0 +1,101 @@
+/* =========================================================
+   FocusForge Base Styles
+   Shared, foundational rules only. No page-specific or
+   app-shell-specific layout here — that belongs in app.css
+   (and later landing.css). Everything below consumes tokens
+   from tokens.css rather than hardcoding values.
+   ========================================================= */
+
+/* ---------- Box sizing & global transition ---------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: background-color var(--duration-normal) var(--ease-standard),
+                color var(--duration-normal) var(--ease-standard),
+                border-color var(--duration-normal) var(--ease-standard),
+                box-shadow var(--duration-normal) var(--ease-standard),
+                transform var(--duration-normal) var(--ease-standard);
+}
+
+/* ---------- Body defaults ---------- */
+body {
+    font-family: var(--font-body);
+    font-size: var(--fs-body);
+    line-height: var(--lh-normal);
+    font-weight: var(--fw-regular);
+    color: var(--text-primary);
+    background: var(--bg-page);
+}
+
+/* ---------- Headings ---------- */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+    color: var(--text-primary);
+}
+
+h1 { font-size: var(--fs-h1); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+
+/* ---------- Links ---------- */
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* ---------- Buttons (generic reset; component color/spacing
+   rules live in app.css / landing.css) ---------- */
+button {
+    font-family: var(--font-body);
+    font-size: var(--fs-body);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* ---------- Form controls ---------- */
+input,
+select,
+textarea {
+    font-family: var(--font-body);
+    font-size: var(--fs-body);
+    color: var(--input-text);
+    background: var(--input-bg);
+}
+
+/* ---------- Accessible focus states ---------- */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+}
+
+/* ---------- Selection ---------- */
+::selection {
+    background: var(--selection-bg);
+    color: var(--selection-text);
+}
+
+/* ---------- Accessibility utility ---------- */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

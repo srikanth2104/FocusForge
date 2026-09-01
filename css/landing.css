@@ -1,0 +1,59 @@
+/* =========================================================
+   FocusForge Landing Page Foundation
+   Phase 2 scope: reusable primitives only. The actual
+   landing page markup/sections are built in Phase 3. This
+   file is not yet linked from any HTML page.
+
+   Everything here consumes tokens.css variables so the
+   landing page will automatically match the app's visual
+   language once it's built.
+   ========================================================= */
+
+/* Generic content wrapper for landing sections. Keeps a
+   comfortable max width and consistent horizontal padding
+   across breakpoints — used by every future landing section. */
+.landing-container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+}
+
+/* Generic vertical rhythm wrapper for a landing section.
+   Individual sections (hero, features, etc.) will extend
+   this in Phase 3 rather than repeating spacing values. */
+.landing-section {
+    padding: var(--space-8) 0;
+}
+
+/* Reusable call-to-action button primitives, built on the
+   shared tokens so CTA styling matches the brand from the
+   very first section we design in Phase 3. */
+.btn {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-weight: var(--fw-semibold);
+    font-size: var(--fs-body);
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-sm);
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: var(--accent-gold);
+    color: var(--navy-900);
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-gold-hover);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    border-color: var(--accent-gold);
+}

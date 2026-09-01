@@ -1,0 +1,270 @@
+/* =========================================================
+   FocusForge App Shell Styles
+   Migrated from the original style.css. Structure and
+   appearance are preserved; hardcoded colors are replaced
+   with tokens from tokens.css so dark mode no longer needs
+   duplicated component-level overrides.
+
+   NOTE on migration fixes (see Phase 1 analysis):
+   - The old ".task-filters" rule never matched any element
+     (the HTML uses ".tasks-filters") and has been dropped as
+     dead CSS. ".filter-btn" spacing/sizing is unaffected.
+   - The old dark-mode selector ".filter-btn.activate" never
+     matched real markup (JS/CSS elsewhere use ".active").
+     The active filter button is now themed correctly in dark
+     mode via --filter-btn-active-bg / --filter-btn-active-text.
+   No layout, spacing, or visual arrangement has changed.
+   ========================================================= */
+
+/* ---------- LAYOUT ---------- */
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 220px;
+    background: var(--bg-sidebar);
+    color: var(--text-sidebar);
+    padding: var(--space-5);
+}
+
+.logo {
+    margin-bottom: var(--space-7);
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li {
+    margin: var(--space-4) 0;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: var(--nav-link-text);
+    display: block;
+    padding: var(--space-3);
+    border-radius: var(--radius-lg);
+}
+
+.sidebar a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar a.active {
+    background-color: var(--nav-active-bg);
+    color: var(--nav-active-text);
+    font-weight: var(--fw-bold);
+}
+
+.main-content {
+    flex: 1;
+    padding: var(--space-7);
+    background: var(--bg-main-content);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-xl);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-7);
+}
+
+/* ---------- DASHBOARD CARDS ---------- */
+.cards {
+    display: flex;
+    gap: var(--space-5);
+}
+
+.card {
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    padding: var(--space-5);
+    flex: 1;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg-hover);
+}
+
+/* ---------- TASK & HABIT INPUT SECTION ---------- */
+.task-input,
+.habit-input {
+    display: flex;
+    gap: var(--space-3);
+    margin: var(--space-5) 0;
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+}
+
+.task-input input,
+.habit-input input {
+    flex: 1;
+    padding: var(--space-3);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--input-border);
+}
+
+.task-input button {
+    padding: var(--space-3) var(--space-4);
+    border: none;
+    background-color: var(--accent-blue);
+    color: var(--white);
+    border-radius: var(--radius-sm);
+}
+
+.task-input button:hover {
+    background-color: var(--accent-blue-hover);
+}
+
+.habit-input button {
+    padding: var(--space-3) var(--space-4);
+    border: none;
+    background-color: var(--color-success);
+    color: var(--white);
+    border-radius: var(--radius-sm);
+}
+
+.habit-input button:hover {
+    background-color: var(--color-success-hover);
+}
+
+/* ---------- TASK & HABIT LIST ---------- */
+#taskList,
+#habitList {
+    list-style: none;
+}
+
+#taskList li,
+#habitList li {
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    padding: var(--space-3);
+    margin-bottom: var(--space-3);
+    border-radius: var(--radius-sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#taskList li:hover,
+#habitList li:hover {
+    transform: scale(1.02);
+}
+
+.completed {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+/* ---------- POMODORO ---------- */
+.pomodoro {
+    margin-top: var(--space-8);
+    background: var(--bg-pomodoro);
+    color: var(--text-primary);
+    padding: var(--space-5);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.timer-display {
+    font-size: var(--fs-timer);
+    margin: var(--space-5) 0;
+}
+
+.timer-buttons button {
+    margin-right: var(--space-3);
+    padding: var(--space-2) 14px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-warning);
+    color: var(--white);
+}
+
+.timer-buttons button:hover {
+    background-color: var(--color-warning-hover);
+}
+
+/* ---------- STATS / CHART ---------- */
+.stats-summary p {
+    margin-bottom: var(--space-2);
+    font-size: var(--fs-body);
+}
+
+.stats-summary {
+    background: var(--bg-stats-summary);
+    color: var(--text-primary);
+    margin-bottom: var(--space-7);
+    padding: var(--space-5);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+canvas {
+    margin-top: var(--space-7);
+    background: var(--bg-surface);
+    padding: var(--space-5);
+    border-radius: var(--radius-md);
+}
+
+/* ---------- EMPTY MESSAGE ---------- */
+#emptyMessage {
+    margin-top: var(--space-4);
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+/* ---------- TASK FILTER BUTTONS ---------- */
+.tasks-filters {
+    display: flex;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+}
+
+.filter-btn {
+    padding: var(--space-2) var(--space-4);
+    border: none;
+    border-radius: var(--radius-pill);
+    background-color: var(--filter-btn-bg);
+    color: var(--filter-btn-text);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+}
+
+.filter-btn:hover {
+    background-color: var(--filter-btn-hover-bg);
+}
+
+.filter-btn.active {
+    background-color: var(--filter-btn-active-bg);
+    color: var(--filter-btn-active-text);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .sidebar {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .main-content {
+        padding: var(--space-4);
+    }
+
+    .cards {
+        flex-direction: column;
+    }
+}

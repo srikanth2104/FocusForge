@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>FocusForge - Productivity Tracker</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/tokens.css">
+        <link rel="stylesheet" href="css/base.css">
+        <link rel="stylesheet" href="css/app.css">
+    </head>
+    <body>
+        <div class="container">
+            <aside class="sidebar">
+                <h2 class="logo">FocusForge</h2>
+                <nav>
+                    <ul>
+                        <li><a href="index.html" class="active">Dashboard</a></li>
+                        <li><a href="tasks.html">Tasks</a></li>
+                        <li><a href="habits.html">Habits</a></li>
+                        <li><a href="stats.html">Stats</a></li>
+                    </ul>
+                </nav>
+            </aside>
+            <main class="main-content">
+
+                <header>
+                    <h1>Dashboard</h1>
+                    <button id="darkModeToggle" class="darkmode">🌙</button>
+                </header>
+
+                <section class="cards">
+                    <div class="card">
+                        <h3>Todays Tasks</h3>
+                        <p id="taskCount">0 Tasks</p>
+                    </div>
+                    <div class="card">
+                        <h3>Habit Streak</h3>
+                        <p id="streakCount" class="streakCount">0 Days</p>
+                    </div>
+                    <div class="card">
+                        <h3>Focus Time</h3> 
+                        <p id="focusTime" class="focusTime">0 mins</p>
+                    </div>
+                </section>
+
+                
+                <section class="pomodoro">
+                    <h2>Pomodoro Timer</h2>
+
+                    <div class="timer-display">
+                        <span id="minutes">25</span>  :
+                        <span id="seconds">00</span>
+                    </div>
+
+                    <div class="timer-buttons">
+                        <button id="startTimer">Start Timer</button>
+                        <button id="pauseTimer">Pause Timer</button>
+                        <button id="resetTimer">Reset Timer</button>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+
+        <script src="js/app.js"></script>
+    </body>
+</html>
