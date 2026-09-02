@@ -1,41 +1,58 @@
 /* =========================================================
-   FocusForge Landing Page Foundation
-   Phase 2 scope: reusable primitives only. The actual
-   landing page markup/sections are built in Phase 3. This
-   file is not yet linked from any HTML page.
+   FocusForge Landing Page Styles (simplified)
+   Landing-only CSS, loaded only by index.html. Uses the same
+   tokens.css variables as the rest of the site, so light/dark
+   mode applies consistently across the whole landing page.
 
-   Everything here consumes tokens.css variables so the
-   landing page will automatically match the app's visual
-   language once it's built.
+   The navigation bar is the one exception: it stays a solid
+   dark color in both themes, the same way the app's sidebar
+   (in app.css) is always dark regardless of light/dark mode.
    ========================================================= */
 
-/* Generic content wrapper for landing sections. Keeps a
-   comfortable max width and consistent horizontal padding
-   across breakpoints — used by every future landing section. */
-.landing-container {
-    max-width: 1120px;
+/* ---------- Layout ---------- */
+.section-inner {
+    max-width: 1000px;
     margin: 0 auto;
     padding: 0 var(--space-6);
 }
 
-/* Generic vertical rhythm wrapper for a landing section.
-   Individual sections (hero, features, etc.) will extend
-   this in Phase 3 rather than repeating spacing values. */
-.landing-section {
-    padding: var(--space-8) 0;
+section {
+    padding: 64px 0;
 }
 
-/* Reusable call-to-action button primitives, built on the
-   shared tokens so CTA styling matches the brand from the
-   very first section we design in Phase 3. */
+@media (max-width: 640px) {
+    section { padding: 40px 0; }
+    .section-inner { padding: 0 var(--space-4); }
+}
+
+/* ---------- Simple reveal-on-scroll (fade only) ---------- */
+.reveal {
+    opacity: 0;
+    transition: opacity var(--duration-slow) var(--ease-standard);
+}
+
+.reveal.is-visible {
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal {
+        opacity: 1;
+        transition: none;
+    }
+}
+
+/* ---------- Buttons ---------- */
 .btn {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-family: var(--font-body);
     font-weight: var(--fw-semibold);
     font-size: var(--fs-body);
-    padding: var(--space-3) var(--space-6);
+    padding: var(--space-3) var(--space-5);
     border-radius: var(--radius-sm);
-    border: none;
+    border: 1px solid transparent;
     cursor: pointer;
 }
 
@@ -50,10 +67,704 @@
 
 .btn-secondary {
     background-color: transparent;
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
+    color: inherit;
+    border-color: var(--border-color);
 }
 
 .btn-secondary:hover {
     border-color: var(--accent-gold);
+}
+
+.btn-text {
+    background: transparent;
+    color: inherit;
+}
+
+.btn-lg {
+    padding: var(--space-3) var(--space-6);
+    font-size: 1.05rem;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.link-button {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--accent-gold);
+    font-weight: var(--fw-semibold);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* =========================================================
+   NAVIGATION (always dark, like the app sidebar)
+   ========================================================= */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: var(--navy-900);
+    color: var(--white);
+}
+
+.nav-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: var(--space-4) var(--space-6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+}
+
+.brand {
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: 1.15rem;
+    color: var(--white);
+}
+
+.primary-nav ul {
+    list-style: none;
+    display: flex;
+    gap: var(--space-5);
+}
+
+.primary-nav a {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: var(--fs-small);
+}
+
+.primary-nav a:hover {
+    color: var(--white);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--white);
+}
+
+.theme-toggle:hover {
+    border-color: var(--accent-gold);
+}
+
+.theme-toggle .icon-sun { display: none; }
+body.dark .theme-toggle .icon-moon { display: none; }
+body.dark .theme-toggle .icon-sun { display: inline-block; }
+
+.nav-actions .btn-text {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.mobile-nav-toggle {
+    display: none;
+    width: 34px;
+    height: 34px;
+    background: transparent;
+    border: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.mobile-nav-toggle span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--white);
+}
+
+.mobile-nav {
+    display: none;
+    flex-direction: column;
+    background: var(--navy-900);
+    padding: var(--space-4) var(--space-6) var(--space-5);
+}
+
+.mobile-nav[data-open="true"] {
+    display: flex;
+}
+
+.mobile-nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+}
+
+.mobile-nav-link {
+    display: block;
+    padding: var(--space-3) 0;
+    color: var(--white);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-nav-actions {
+    display: flex;
+    gap: var(--space-3);
+}
+
+.mobile-nav-actions .btn {
+    flex: 1;
+}
+
+@media (max-width: 800px) {
+    .primary-nav,
+    .nav-actions .btn-text,
+    .nav-actions .btn-primary {
+        display: none;
+    }
+    .mobile-nav-toggle {
+        display: inline-flex;
+    }
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero {
+    background: var(--bg-page);
+    color: var(--text-primary);
+    padding-top: 64px;
+    padding-bottom: 64px;
+}
+
+.hero-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: var(--space-7);
+    align-items: center;
+}
+
+.hero-copy h1 {
+    font-size: 2.25rem;
+    margin-bottom: var(--space-4);
+}
+
+.hero-sub {
+    font-size: 1.05rem;
+    line-height: var(--lh-relaxed);
+    color: var(--text-secondary);
+    max-width: 46ch;
+    margin-bottom: var(--space-6);
+}
+
+.hero-actions {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+}
+
+/* Simple hero preview card - a static snapshot, no animation */
+.mini-preview {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-5);
+    max-width: 320px;
+}
+
+.mini-preview-header {
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.mini-preview-row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-2) 0;
+    font-size: var(--fs-small);
+    color: var(--text-secondary);
+}
+
+.mini-preview-row strong {
+    color: var(--accent-gold);
+}
+
+@media (max-width: 860px) {
+    .hero-inner {
+        grid-template-columns: 1fr;
+    }
+    .mini-preview {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 560px) {
+    .hero-copy h1 {
+        font-size: 1.75rem;
+    }
+    .hero-actions .btn {
+        width: 100%;
+    }
+}
+
+/* =========================================================
+   WHAT IS FOCUSFORGE
+   ========================================================= */
+.what-is {
+    background: var(--bg-surface);
+    color: var(--text-primary);
+}
+
+.what-is h2 {
+    margin-bottom: var(--space-4);
+}
+
+.what-is p {
+    color: var(--text-secondary);
+    line-height: var(--lh-relaxed);
+    max-width: 65ch;
+}
+
+/* =========================================================
+   FEATURES
+   ========================================================= */
+.features {
+    background: var(--bg-page);
+    color: var(--text-primary);
+}
+
+.features h2 {
+    margin-bottom: var(--space-6);
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-5);
+}
+
+.feature-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+}
+
+.feature-card:hover {
+    box-shadow: var(--shadow-sm);
+}
+
+.feature-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    background: rgba(245, 158, 11, 0.12);
+    color: var(--accent-gold);
+    margin-bottom: var(--space-3);
+}
+
+.feature-card h3 {
+    margin-bottom: var(--space-2);
+}
+
+.feature-card p {
+    color: var(--text-secondary);
+    font-size: var(--fs-small);
+    line-height: var(--lh-relaxed);
+}
+
+@media (max-width: 800px) {
+    .feature-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================================
+   HOW IT WORKS
+   ========================================================= */
+.how-it-works {
+    background: var(--bg-surface);
+    color: var(--text-primary);
+}
+
+.how-it-works h2 {
+    margin-bottom: var(--space-6);
+}
+
+.steps {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-5);
+}
+
+.step-number {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--accent-gold);
+    font-weight: var(--fw-semibold);
+    margin-bottom: var(--space-2);
+}
+
+.step h3 {
+    margin-bottom: var(--space-2);
+    font-size: var(--fs-h3);
+}
+
+.step p {
+    color: var(--text-secondary);
+    font-size: var(--fs-small);
+    line-height: var(--lh-relaxed);
+}
+
+@media (max-width: 800px) {
+    .steps {
+        grid-template-columns: 1fr 1fr;
+        row-gap: var(--space-6);
+    }
+}
+
+@media (max-width: 480px) {
+    .steps {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================================
+   PRODUCT PREVIEW
+   A single simplified mockup card - no chart, no nested
+   sub-layouts. Just a sidebar strip and a few sample widgets,
+   similar in spirit to the real dashboard.
+   ========================================================= */
+.product-preview {
+    background: var(--bg-page);
+    color: var(--text-primary);
+}
+
+.product-preview h2 {
+    margin-bottom: var(--space-6);
+    text-align: center;
+}
+
+.app-preview {
+    max-width: 720px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    background: var(--navy-900);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.app-preview-sidebar {
+    background: var(--navy-950);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.app-preview-logo {
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    color: var(--white);
+    font-size: 0.8rem;
+    margin-bottom: var(--space-2);
+}
+
+.app-preview-link {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.55);
+    padding: var(--space-2);
+    border-radius: var(--radius-sm);
+}
+
+.app-preview-link.is-active {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--white);
+}
+
+.app-preview-main {
+    padding: var(--space-5);
+}
+
+.app-preview-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+}
+
+.app-preview-card {
+    background: var(--navy-800);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.app-preview-label {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.app-preview-value {
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    color: var(--accent-gold);
+    font-size: 1rem;
+}
+
+.app-preview-tasks {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.app-preview-tasks li {
+    background: var(--navy-800);
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.8rem;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+}
+
+.app-preview-tasks li.is-done {
+    color: rgba(255, 255, 255, 0.4);
+    text-decoration: line-through;
+}
+
+@media (max-width: 640px) {
+    .app-preview {
+        grid-template-columns: 1fr;
+    }
+    .app-preview-sidebar {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .app-preview-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================================
+   FINAL CTA
+   ========================================================= */
+.final-cta {
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.final-cta-inner {
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+.final-cta h2 {
+    margin-bottom: var(--space-3);
+}
+
+.final-cta p {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-5);
+}
+
+/* =========================================================
+   FOOTER (always dark, matches the nav)
+   ========================================================= */
+.site-footer {
+    background: var(--navy-900);
+    color: rgba(255, 255, 255, 0.65);
+    padding: var(--space-6) 0;
+}
+
+.footer-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-6);
+    margin-bottom: var(--space-5);
+    flex-wrap: wrap;
+}
+
+.footer-brand .brand {
+    display: block;
+    margin-bottom: var(--space-2);
+}
+
+.footer-brand p {
+    font-size: var(--fs-small);
+    max-width: 32ch;
+}
+
+.footer-column h3 {
+    color: var(--white);
+    font-size: var(--fs-small);
+    margin-bottom: var(--space-2);
+}
+
+.footer-column ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.footer-column a {
+    font-size: var(--fs-small);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.footer-column a:hover {
+    color: var(--accent-gold);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: var(--space-4);
+    font-size: var(--fs-xs);
+}
+
+/* =========================================================
+   MODALS (Login / Sign Up)
+   ========================================================= */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.55);
+    z-index: 90;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-5);
+}
+
+/* Author CSS for a class like .modal (above) takes priority
+   over the browser's default [hidden] rule, so this explicit
+   override is needed - otherwise a "hidden" modal would still
+   show up on the page. */
+.modal[hidden] {
+    display: none;
+}
+
+.modal-panel {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--space-6) var(--space-5) var(--space-5);
+}
+
+.modal-panel h2 {
+    margin-bottom: var(--space-2);
+}
+
+.modal-note {
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    margin-bottom: var(--space-5);
+}
+
+.modal-close {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+}
+
+.form-field {
+    margin-bottom: var(--space-4);
+}
+
+.form-field label {
+    display: block;
+    font-size: var(--fs-small);
+    font-weight: var(--fw-medium);
+    margin-bottom: var(--space-1);
+}
+
+.form-field input {
+    width: 100%;
+    padding: var(--space-3);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--input-border);
+}
+
+.form-field.has-error input {
+    border-color: var(--color-danger);
+}
+
+.form-error {
+    display: block;
+    min-height: 1.1em;
+    font-size: var(--fs-xs);
+    color: var(--color-danger);
+    margin-top: var(--space-1);
+}
+
+.form-success {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--color-success-hover);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3);
+    font-size: var(--fs-small);
+    margin-bottom: var(--space-4);
+}
+
+.modal-switch {
+    text-align: center;
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    margin-top: var(--space-4);
 }

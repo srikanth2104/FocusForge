@@ -13,7 +13,8 @@ const STORAGE_KEYS = {
     tasks: "focusforge_tasks",
     habits: "focusforge_habits",
     focusMinutes: "focusforge_focusMinutes",
-    darkMode: "focusforge_darkMode"
+    darkMode: "focusforge_darkMode",
+    pomodoro: "focusforge_pomodoro"
 };
 
 /* ---------- Generic storage helpers ---------- */
@@ -327,6 +328,12 @@ function initPomodoro() {
     let totalSeconds = SESSION_MINUTES * 60;
     let intervalId = null;
 
+    // How many whole minutes of THIS session have already been added to
+    // focusforge_focusMinutes. Reset to 0 whenever the timer goes back to
+    // a fresh 25:00 (on Reset, or after a session completes naturally).
+    // This is what stops Pause from saving the same minutes twice.
+    let minutesSavedThisSession = 0;
+
     function render() {
         const mins = Math.floor(totalSeconds / 60);
         const secs = totalSeconds % 60;
@@ -334,42 +341,136 @@ function initPomodoro() {
         secondsEl.textContent = String(secs).padStart(2, "0");
     }
 
+    // Saves any newly-completed whole minutes from the current running
+    // session (i.e. the minutes elapsed since the last time we saved).
+    // Safe to call multiple times in a row - if nothing new has elapsed,
+    // it simply does nothing.
+    function saveNewlyElapsedMinutes() {
+        const elapsedSeconds = SESSION_MINUTES * 60 - totalSeconds;
+        const minutesElapsed = Math.floor(elapsedSeconds / 60);
+
+        // Never let a single session add more than SESSION_MINUTES in
+        // total. This guards against totalSeconds ever being negative
+        // (e.g. a running session was away long enough to pass 00:00) -
+        // without this cap, elapsedSeconds could exceed the session
+        // length and over-credit focus minutes.
+        const maxMinutesRemaining = SESSION_MINUTES - minutesSavedThisSession;
+        const minutesToAdd = Math.min(minutesElapsed - minutesSavedThisSession, maxMinutesRemaining);
+
+        if (minutesToAdd > 0) {
+            addFocusMinutes(minutesToAdd);
+            minutesSavedThisSession += minutesToAdd;
+            updateDashboardSummary();
+        }
+    }
+
+    // ---------------------------------------------------------------
+    // CROSS-PAGE PERSISTENCE
+    // The Pomodoro timer state is saved to focusforge_pomodoro so that
+    // navigating to another FocusForge page (a full page load, since
+    // this is a multi-page site) can restore it instead of starting
+    // over at 25:00. We store the remaining seconds, whether it was
+    // running, the moment that snapshot was taken, and how many
+    // minutes of the current session are already saved.
+    // ---------------------------------------------------------------
+    function persistState() {
+        saveJSON(STORAGE_KEYS.pomodoro, {
+            remainingSeconds: totalSeconds,
+            isRunning: intervalId !== null,
+            savedAt: Date.now(),
+            minutesSaved: minutesSavedThisSession
+        });
+    }
+
+    // Shared by both "timer hits 00:00 while this page is open" and
+    // "timer would have hit 00:00 while the user was on another page".
+    function completeSession() {
+        saveNewlyElapsedMinutes(); // tops off to exactly SESSION_MINUTES total
+        alert("Pomodoro session complete! Great focus.");
+        totalSeconds = SESSION_MINUTES * 60;
+        minutesSavedThisSession = 0;
+        render();
+        persistState();
+    }
+
     function tick() {
         if (totalSeconds <= 0) {
             clearInterval(intervalId);
             intervalId = null;
-            addFocusMinutes(SESSION_MINUTES);
-            updateDashboardSummary();
-            alert("Pomodoro session complete! Great focus.");
-            totalSeconds = SESSION_MINUTES * 60;
-            render();
+            completeSession();
             return;
         }
         totalSeconds -= 1;
         render();
+        persistState(); // keep "savedAt" fresh so navigating away stays accurate
     }
 
     function start() {
         if (intervalId) return; // already running
         intervalId = setInterval(tick, 1000);
+        persistState();
     }
 
     function pause() {
         clearInterval(intervalId);
         intervalId = null;
+        saveNewlyElapsedMinutes();
+        persistState();
     }
 
     function reset() {
-        pause();
+        // Reset discards the current, not-yet-saved partial session -
+        // it deliberately does NOT call saveNewlyElapsedMinutes(). Minutes
+        // already saved by an earlier Pause are left alone (not rolled back).
+        clearInterval(intervalId);
+        intervalId = null;
         totalSeconds = SESSION_MINUTES * 60;
+        minutesSavedThisSession = 0;
         render();
+        persistState();
+    }
+
+    // Restore whatever state was saved (by this page or another page)
+    // before wiring up the buttons and doing the first render.
+    function restoreState() {
+        const saved = loadJSON(STORAGE_KEYS.pomodoro, null);
+
+        if (!saved) {
+            // Nothing saved yet (first time ever using the timer).
+            render();
+            persistState();
+            return;
+        }
+
+        minutesSavedThisSession = saved.minutesSaved || 0;
+
+        if (saved.isRunning) {
+            // Figure out how much time passed while the user was away,
+            // and fast-forward the remaining time by that much.
+            const elapsedWhileAway = Math.floor((Date.now() - saved.savedAt) / 1000);
+            totalSeconds = saved.remainingSeconds - elapsedWhileAway;
+
+            if (totalSeconds <= 0) {
+                // The session would have finished while the user was on
+                // another page (or away from the tab). Count it once.
+                totalSeconds = 0;
+                completeSession();
+            } else {
+                render();
+                start(); // keep counting down on this page too
+            }
+        } else {
+            // Paused, or already reset to a fresh 25:00 - just restore it.
+            totalSeconds = saved.remainingSeconds;
+            render();
+        }
     }
 
     if (startBtn) startBtn.addEventListener("click", start);
     if (pauseBtn) pauseBtn.addEventListener("click", pause);
     if (resetBtn) resetBtn.addEventListener("click", reset);
 
-    render();
+    restoreState();
 }
 
 /* =========================================================

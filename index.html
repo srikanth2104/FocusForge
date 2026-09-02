@@ -1,69 +1,348 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>FocusForge - Productivity Tracker</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="css/tokens.css">
-        <link rel="stylesheet" href="css/base.css">
-        <link rel="stylesheet" href="css/app.css">
-    </head>
-    <body>
-        <div class="container">
-            <aside class="sidebar">
-                <h2 class="logo">FocusForge</h2>
-                <nav>
-                    <ul>
-                        <li><a href="index.html" class="active">Dashboard</a></li>
-                        <li><a href="tasks.html">Tasks</a></li>
-                        <li><a href="habits.html">Habits</a></li>
-                        <li><a href="stats.html">Stats</a></li>
-                    </ul>
-                </nav>
-            </aside>
-            <main class="main-content">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusForge — Forge Your Focus</title>
+    <meta name="description" content="FocusForge is a simple productivity app for managing tasks, habits and focused work sessions.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/landing.css">
+</head>
+<body>
 
-                <header>
-                    <h1>Dashboard</h1>
-                    <button id="darkModeToggle" class="darkmode">🌙</button>
-                </header>
+    <!-- ============ NAVIGATION ============ -->
+    <header class="site-header">
+        <div class="nav-inner">
+            <a href="#home" class="brand">FocusForge</a>
 
-                <section class="cards">
-                    <div class="card">
-                        <h3>Todays Tasks</h3>
-                        <p id="taskCount">0 Tasks</p>
-                    </div>
-                    <div class="card">
-                        <h3>Habit Streak</h3>
-                        <p id="streakCount" class="streakCount">0 Days</p>
-                    </div>
-                    <div class="card">
-                        <h3>Focus Time</h3> 
-                        <p id="focusTime" class="focusTime">0 mins</p>
-                    </div>
-                </section>
+            <nav class="primary-nav" aria-label="Primary">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                </ul>
+            </nav>
 
-                
-                <section class="pomodoro">
-                    <h2>Pomodoro Timer</h2>
+            <div class="nav-actions">
+                <button type="button" id="themeToggle" class="theme-toggle" aria-label="Switch to dark theme" aria-pressed="false">
+                    <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>
+                    <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+                </button>
 
-                    <div class="timer-display">
-                        <span id="minutes">25</span>  :
-                        <span id="seconds">00</span>
-                    </div>
+                <button type="button" class="btn btn-text" data-open-modal="loginModal">Login</button>
+                <button type="button" class="btn btn-primary" data-open-modal="signupModal">Sign Up</button>
 
-                    <div class="timer-buttons">
-                        <button id="startTimer">Start Timer</button>
-                        <button id="pauseTimer">Pause Timer</button>
-                        <button id="resetTimer">Reset Timer</button>
-                    </div>
-                </section>
-
-            </main>
+                <button type="button" id="mobileNavToggle" class="mobile-nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
         </div>
 
-        <script src="js/app.js"></script>
-    </body>
+        <!-- Mobile navigation panel -->
+        <nav id="mobileNav" class="mobile-nav" aria-label="Mobile" hidden>
+            <ul>
+                <li><a href="#home" class="mobile-nav-link">Home</a></li>
+                <li><a href="#features" class="mobile-nav-link">Features</a></li>
+                <li><a href="#how-it-works" class="mobile-nav-link">How It Works</a></li>
+            </ul>
+            <div class="mobile-nav-actions">
+                <button type="button" class="btn btn-secondary" data-open-modal="loginModal">Login</button>
+                <button type="button" class="btn btn-primary" data-open-modal="signupModal">Sign Up</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- ============ HERO ============ -->
+        <section id="home" class="hero">
+            <div class="hero-inner">
+                <div class="hero-copy reveal">
+                    <h1>Forge your focus.<br>Build your discipline.</h1>
+                    <p class="hero-sub">
+                        FocusForge helps you manage tasks, build habits, and get focused
+                        work done using simple Pomodoro sessions — all in one place.
+                    </p>
+                    <div class="hero-actions">
+                        <button type="button" class="btn btn-primary btn-lg" data-open-modal="signupModal">Get Started</button>
+                        <a href="#features" class="btn btn-secondary btn-lg">Explore Features</a>
+                    </div>
+                </div>
+
+                <div class="hero-visual reveal" aria-hidden="true">
+                    <div class="mini-preview">
+                        <div class="mini-preview-header">Dashboard</div>
+                        <div class="mini-preview-row">
+                            <span>Today's Tasks</span>
+                            <strong>3</strong>
+                        </div>
+                        <div class="mini-preview-row">
+                            <span>Habit Streak</span>
+                            <strong>5 days</strong>
+                        </div>
+                        <div class="mini-preview-row">
+                            <span>Focus Time</span>
+                            <strong>50 mins</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ WHAT IS FOCUSFORGE ============ -->
+        <section id="about" class="what-is">
+            <div class="section-inner">
+                <h2>What is FocusForge?</h2>
+                <p>
+                    FocusForge is a simple productivity app that brings your daily tasks,
+                    habits, and focused work sessions into one place. Instead of juggling
+                    several apps, you can plan your day, build consistent habits, and track
+                    your progress from a single dashboard.
+                </p>
+            </div>
+        </section>
+
+        <!-- ============ FEATURES ============ -->
+        <section id="features" class="features">
+            <div class="section-inner">
+                <h2>Features</h2>
+                <div class="feature-grid">
+
+                    <article class="feature-card">
+                        <span class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+                        </span>
+                        <h3>Task Management</h3>
+                        <p>Add, complete, and filter your daily tasks by all, completed, or pending.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <span class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21c-4-3-7-6.5-7-10.5A5 5 0 0 1 12 6a5 5 0 0 1 7 4.5c0 4-3 7.5-7 10.5Z"/></svg>
+                        </span>
+                        <h3>Habit Tracking</h3>
+                        <p>Mark habits done each day and build up a streak that keeps you consistent.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <span class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+                        </span>
+                        <h3>Pomodoro Timer</h3>
+                        <p>Work in focused 25-minute sessions with start, pause, and reset controls.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <span class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10M12 20V4M20 20v-7"/></svg>
+                        </span>
+                        <h3>Progress Tracking</h3>
+                        <p>See completed vs. pending tasks, total focus time, and habit streaks at a glance.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <span class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>
+                        </span>
+                        <h3>Dark Mode</h3>
+                        <p>Switch to a dark theme that stays in sync everywhere you use FocusForge.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <span class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>
+                        </span>
+                        <h3>Simple Dashboard</h3>
+                        <p>One dashboard shows your tasks, habits, and focus time as soon as you log in.</p>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ HOW IT WORKS ============ -->
+        <section id="how-it-works" class="how-it-works">
+            <div class="section-inner">
+                <h2>How It Works</h2>
+                <ol class="steps">
+                    <li class="step">
+                        <span class="step-number">01</span>
+                        <h3>Add your tasks</h3>
+                        <p>Write down what needs to get done today.</p>
+                    </li>
+                    <li class="step">
+                        <span class="step-number">02</span>
+                        <h3>Build your habits</h3>
+                        <p>Mark daily habits done and grow your streak.</p>
+                    </li>
+                    <li class="step">
+                        <span class="step-number">03</span>
+                        <h3>Focus with Pomodoro</h3>
+                        <p>Work in short, focused sessions without distractions.</p>
+                    </li>
+                    <li class="step">
+                        <span class="step-number">04</span>
+                        <h3>Track your progress</h3>
+                        <p>Check your stats to see how your week is going.</p>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- ============ PRODUCT PREVIEW ============ -->
+        <section class="product-preview">
+            <div class="section-inner">
+                <h2>A Look at the Dashboard</h2>
+                <div class="app-preview" aria-hidden="true">
+                    <div class="app-preview-sidebar">
+                        <span class="app-preview-logo">FocusForge</span>
+                        <span class="app-preview-link is-active">Dashboard</span>
+                        <span class="app-preview-link">Tasks</span>
+                        <span class="app-preview-link">Habits</span>
+                        <span class="app-preview-link">Stats</span>
+                    </div>
+                    <div class="app-preview-main">
+                        <div class="app-preview-cards">
+                            <div class="app-preview-card">
+                                <span class="app-preview-label">Today's Tasks</span>
+                                <span class="app-preview-value">3 Tasks</span>
+                            </div>
+                            <div class="app-preview-card">
+                                <span class="app-preview-label">Habit Streak</span>
+                                <span class="app-preview-value">5 Days</span>
+                            </div>
+                            <div class="app-preview-card">
+                                <span class="app-preview-label">Focus Time</span>
+                                <span class="app-preview-value">50 mins</span>
+                            </div>
+                        </div>
+                        <ul class="app-preview-tasks">
+                            <li class="is-done">Write project outline</li>
+                            <li class="is-done">Morning focus session</li>
+                            <li>Review habit list</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="sr-only">Simplified preview of the FocusForge dashboard with sample tasks and stats.</p>
+            </div>
+        </section>
+
+        <!-- ============ FINAL CTA ============ -->
+        <section class="final-cta">
+            <div class="section-inner final-cta-inner">
+                <h2>Ready to build better focus?</h2>
+                <p>Start using FocusForge to manage your tasks, habits, and focus time.</p>
+                <button type="button" class="btn btn-primary btn-lg" data-open-modal="signupModal">Get Started</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="site-footer">
+        <div class="section-inner footer-grid">
+            <div class="footer-brand">
+                <span class="brand">FocusForge</span>
+                <p>A simple productivity app for tasks, habits, and focused work.</p>
+            </div>
+
+            <div class="footer-column">
+                <h3>Navigate</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="section-inner footer-bottom">
+            <p>© 2026 FocusForge. A personal/college project.</p>
+        </div>
+    </footer>
+
+    <!-- ============ MODAL OVERLAY ============ -->
+    <div id="modalOverlay" class="modal-overlay" hidden></div>
+
+    <!-- ============ LOGIN MODAL ============ -->
+    <div id="loginModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle" hidden>
+        <div class="modal-panel">
+            <button type="button" class="modal-close" data-close-modal aria-label="Close dialog">✕</button>
+
+            <h2 id="loginModalTitle">Log In</h2>
+            <p class="modal-note">This is a frontend-only prototype. No account exists yet.</p>
+
+            <form id="loginForm" novalidate>
+                <div class="form-field">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" name="email" autocomplete="email" required>
+                    <span class="form-error" id="loginEmailError" aria-live="polite"></span>
+                </div>
+                <div class="form-field">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" name="password" autocomplete="current-password" required>
+                    <span class="form-error" id="loginPasswordError" aria-live="polite"></span>
+                </div>
+
+                <p class="form-success" id="loginSuccess" aria-live="polite" hidden>
+                    Login successful! Opening FocusForge...
+                </p>
+
+                <button type="submit" class="btn btn-primary btn-block">Log In</button>
+            </form>
+
+            <p class="modal-switch">
+                Don't have an account?
+                <button type="button" class="link-button" data-switch-modal="signupModal">Sign up</button>
+            </p>
+        </div>
+    </div>
+
+    <!-- ============ SIGN UP MODAL ============ -->
+    <div id="signupModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="signupModalTitle" hidden>
+        <div class="modal-panel">
+            <button type="button" class="modal-close" data-close-modal aria-label="Close dialog">✕</button>
+
+            <h2 id="signupModalTitle">Sign Up</h2>
+            <p class="modal-note">This is a frontend-only prototype. No account is created.</p>
+
+            <form id="signupForm" novalidate>
+                <div class="form-field">
+                    <label for="signupName">Name</label>
+                    <input type="text" id="signupName" name="name" autocomplete="name" required>
+                    <span class="form-error" id="signupNameError" aria-live="polite"></span>
+                </div>
+                <div class="form-field">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" name="email" autocomplete="email" required>
+                    <span class="form-error" id="signupEmailError" aria-live="polite"></span>
+                </div>
+                <div class="form-field">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" name="password" autocomplete="new-password" required minlength="8">
+                    <span class="form-error" id="signupPasswordError" aria-live="polite"></span>
+                </div>
+                <div class="form-field">
+                    <label for="signupConfirmPassword">Confirm password</label>
+                    <input type="password" id="signupConfirmPassword" name="confirmPassword" autocomplete="new-password" required>
+                    <span class="form-error" id="signupConfirmPasswordError" aria-live="polite"></span>
+                </div>
+
+                <p class="form-success" id="signupSuccess" aria-live="polite" hidden>
+                    Form looks good — this is just a frontend prototype, so no account was created.
+                </p>
+
+                <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+            </form>
+
+            <p class="modal-switch">
+                Already have an account?
+                <button type="button" class="link-button" data-switch-modal="loginModal">Log in</button>
+            </p>
+        </div>
+    </div>
+
+    <script src="js/landing.js"></script>
+</body>
 </html>
