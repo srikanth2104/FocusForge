@@ -73,6 +73,31 @@ function todayString() {
 }
 
 /* =========================================================
+   SCREEN-READER STATUS ANNOUNCEMENTS
+   One sr-only aria-live region (created on first use) tells
+   screen-reader users about dynamic changes — added/deleted
+   tasks, streak progress — which would otherwise be silent.
+   ========================================================= */
+let announceTimer = null;
+
+function announce(message) {
+    let region = document.getElementById("a11yStatus");
+    if (!region) {
+        region = document.createElement("p");
+        region.id = "a11yStatus";
+        region.className = "sr-only";
+        region.setAttribute("aria-live", "polite");
+        document.body.appendChild(region);
+    }
+    // Clear first so repeating the same message is still announced.
+    region.textContent = "";
+    window.clearTimeout(announceTimer);
+    announceTimer = window.setTimeout(() => {
+        region.textContent = message;
+    }, 50);
+}
+
+/* =========================================================
    DARK MODE (all pages)
    ========================================================= */
 function initDarkMode() {
@@ -96,6 +121,12 @@ function initDarkMode() {
 function updateDarkModeIcon(toggleBtn, isDark) {
     if (!toggleBtn) return;
     toggleBtn.textContent = isDark ? "☀️" : "🌙";
+    // The emoji alone is not a reliable accessible name, and it never
+    // tells screen-reader users what the button will DO.
+    toggleBtn.setAttribute(
+        "aria-label",
+        isDark ? "Switch to light mode" : "Switch to dark mode"
+    );
 }
 
 /* =========================================================
@@ -138,11 +169,18 @@ function initTasksPage() {
             const completeBtn = document.createElement("button");
             completeBtn.className = "task-complete-btn";
             completeBtn.textContent = task.completed ? "Undo" : "✓";
+            // "✓"/"✕" alone are meaningless to screen readers, and they
+            // do not say WHICH task they act on.
+            completeBtn.setAttribute(
+                "aria-label",
+                (task.completed ? "Undo task: " : "Mark task as complete: ") + task.text
+            );
             completeBtn.addEventListener("click", () => toggleTaskComplete(task.id));
 
             const deleteBtn = document.createElement("button");
             deleteBtn.className = "task-delete-btn";
             deleteBtn.textContent = "✕";
+            deleteBtn.setAttribute("aria-label", "Delete task: " + task.text);
             deleteBtn.addEventListener("click", () => deleteTask(task.id));
 
             actions.appendChild(completeBtn);
@@ -171,6 +209,7 @@ function initTasksPage() {
 
         taskInput.value = "";
         renderTasks();
+        announce("Task added.");
     }
 
     function toggleTaskComplete(id) {
@@ -179,12 +218,33 @@ function initTasksPage() {
         if (task) task.completed = !task.completed;
         saveTasks(tasks);
         renderTasks();
+
+        // renderTasks() rebuilt every row, so keyboard focus would fall
+        // back to <body>. Put it on the same row's button again.
+        const btn = taskList.querySelector(`li[data-id="${id}"] .task-complete-btn`);
+        if (btn) btn.focus();
+        if (task) {
+            announce(task.completed ? "Task marked complete." : "Task moved back to pending.");
+        }
     }
 
     function deleteTask(id) {
+        // Remember where the row was, so focus can land on the row that
+        // took its place instead of jumping back to the top of the page.
+        const oldIndex = Array.from(taskList.children)
+            .findIndex((row) => row.dataset.id === id);
+
         const tasks = getTasks().filter((t) => t.id !== id);
         saveTasks(tasks);
         renderTasks();
+
+        const rows = Array.from(taskList.children);
+        const targetRow = rows[oldIndex] || rows[oldIndex - 1];
+        const focusTarget = targetRow
+            ? targetRow.querySelector(".task-complete-btn")
+            : taskInput;
+        if (focusTarget) focusTarget.focus();
+        announce("Task deleted.");
     }
 
     if (addTaskBtn) {
@@ -196,13 +256,28 @@ function initTasksPage() {
         });
     }
 
+    // Toggle aria-pressed together with the visual "active" class so
+    // screen readers announce which filter is currently selected.
+    function setActiveFilter(selectedBtn) {
+        filterBtns.forEach((b) => {
+            const isActive = b === selectedBtn;
+            b.classList.toggle("active", isActive);
+            b.setAttribute("aria-pressed", String(isActive));
+        });
+        currentFilter = selectedBtn.dataset.filter;
+    }
+
     filterBtns.forEach((btn) => {
         btn.addEventListener("click", () => {
-            filterBtns.forEach((b) => b.classList.remove("active"));
-            btn.classList.add("active");
-            currentFilter = btn.dataset.filter;
+            setActiveFilter(btn);
             renderTasks();
+            announce(`Showing ${btn.dataset.filter} tasks.`);
         });
+    });
+
+    // Set the initial aria-pressed state to match the HTML.
+    filterBtns.forEach((btn) => {
+        btn.setAttribute("aria-pressed", String(btn.classList.contains("active")));
     });
 
     renderTasks();
@@ -240,11 +315,18 @@ function initHabitsPage() {
             checkBtn.className = "habit-check-btn";
             checkBtn.textContent = doneToday ? "Done Today" : "Mark Done";
             checkBtn.disabled = doneToday;
+            // Include the habit name so the action is clear when heard
+            // out of context (the visible label alone doesn't say which).
+            checkBtn.setAttribute(
+                "aria-label",
+                (doneToday ? "Already done today: " : "Mark habit done: ") + habit.text
+            );
             checkBtn.addEventListener("click", () => markHabitDone(habit.id));
 
             const deleteBtn = document.createElement("button");
             deleteBtn.className = "habit-delete-btn";
             deleteBtn.textContent = "✕";
+            deleteBtn.setAttribute("aria-label", "Delete habit: " + habit.text);
             deleteBtn.addEventListener("click", () => deleteHabit(habit.id));
 
             actions.appendChild(checkBtn);
@@ -268,6 +350,7 @@ function initHabitsPage() {
 
         habitInput.value = "";
         renderHabits();
+        announce("Habit added.");
     }
 
     function markHabitDone(id) {
@@ -292,12 +375,43 @@ function initHabitsPage() {
 
         saveHabits(habits);
         renderHabits();
+
+        // renderHabits() rebuilt the rows, and the "Done Today" button is
+        // now disabled (disabled buttons can't hold focus), so move focus
+        // to the row's delete button instead.
+        const row = habitList.querySelector(`li[data-id="${id}"]`);
+        const focusTarget = row ? row.querySelector(".habit-delete-btn") : null;
+        if (focusTarget) focusTarget.focus();
+        announce(
+            `Habit done. Streak: ${habit.streak} day${habit.streak === 1 ? "" : "s"}.`
+        );
     }
 
     function deleteHabit(id) {
+        // Remember where the row was, so focus lands on the row that
+        // takes its place rather than jumping to the top of the page.
+        const oldIndex = Array.from(habitList.children)
+            .findIndex((row) => row.dataset.id === id);
+
         const habits = getHabits().filter((h) => h.id !== id);
         saveHabits(habits);
         renderHabits();
+
+        const rows = Array.from(habitList.children);
+        const targetRow = rows[oldIndex] || rows[oldIndex - 1];
+        let focusTarget = null;
+        if (targetRow) {
+            const check = targetRow.querySelector(".habit-check-btn");
+            // Fall back to the delete button when the check button is
+            // disabled (habit already done today).
+            focusTarget = (check && !check.disabled)
+                ? check
+                : targetRow.querySelector(".habit-delete-btn");
+        } else {
+            focusTarget = habitInput;
+        }
+        if (focusTarget) focusTarget.focus();
+        announce("Habit deleted.");
     }
 
     if (addHabitBtn) {
@@ -527,6 +641,19 @@ function initStatsPage() {
     if (pendingTasksEl) pendingTasksEl.textContent = pendingCount;
     if (totalFocusEl) totalFocusEl.textContent = focusMinutes;
     if (totalStreakEl) totalStreakEl.textContent = totalStreak;
+
+    if (chartCanvas) {
+        // The canvas is a picture of the four numbers already listed in
+        // the .stats-summary above it — give screen readers the same
+        // facts as a text alternative.
+        chartCanvas.setAttribute("role", "img");
+        chartCanvas.setAttribute(
+            "aria-label",
+            `Bar chart of your stats: ${completedCount} completed tasks, ` +
+            `${pendingCount} pending tasks, ${focusMinutes} focus minutes, ` +
+            `total habit streak ${totalStreak}.`
+        );
+    }
 
     if (chartCanvas && typeof Chart !== "undefined") {
         new Chart(chartCanvas, {

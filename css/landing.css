@@ -93,7 +93,8 @@ section {
     background: none;
     border: none;
     padding: 0;
-    color: var(--accent-gold);
+    /* Text-safe gold: bright gold was ~2.2:1 on the white modal. */
+    color: var(--accent-gold-text);
     font-weight: var(--fw-semibold);
     text-decoration: underline;
     cursor: pointer;
@@ -428,7 +429,8 @@ body.dark .theme-toggle .icon-sun { display: inline-block; }
     display: block;
     font-family: var(--font-display);
     font-size: 1.1rem;
-    color: var(--accent-gold);
+    /* Text-safe gold: bright gold was ~2.2:1 on the white section. */
+    color: var(--accent-gold-text);
     font-weight: var(--fw-semibold);
     margin-bottom: var(--space-2);
 }
@@ -748,13 +750,15 @@ body.dark .theme-toggle .icon-sun { display: inline-block; }
     display: block;
     min-height: 1.1em;
     font-size: var(--fs-xs);
-    color: var(--color-danger);
+    /* Theme-aware red: red-500 was ~3.8:1 in both themes. */
+    color: var(--color-error-text);
     margin-top: var(--space-1);
 }
 
 .form-success {
     background: rgba(34, 197, 94, 0.1);
-    color: var(--color-success-hover);
+    /* Theme-aware green: green-600 on the tinted background was ~3.0:1. */
+    color: var(--color-success-text);
     border: 1px solid rgba(34, 197, 94, 0.3);
     border-radius: var(--radius-sm);
     padding: var(--space-3);

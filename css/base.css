@@ -79,6 +79,12 @@ textarea:focus-visible,
 [tabindex]:focus-visible {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: var(--focus-ring-offset);
+    /* Dark companion ring that fills the outline-offset gap. The gold
+       outline alone is only ~2:1 against white/light backgrounds, so
+       this guarantees a high-contrast ring in BOTH themes (on dark
+       backgrounds the gold ring already contrasts at ~8:1 and this
+       companion is barely visible). */
+    box-shadow: 0 0 0 var(--focus-ring-offset) var(--navy-900);
 }
 
 /* ---------- Selection ---------- */
@@ -98,4 +104,38 @@ textarea:focus-visible,
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+
+/* ---------- Skip link: first tab stop on every page, visible only
+     when it receives the keyboard's focus ---------- */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 200;
+}
+
+.skip-link:focus {
+    left: var(--space-4);
+    top: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-lg);
+}
+
+/* ---------- Placeholder text: theme-aware and AA-contrast
+     (browser default colors are unreliable on dark inputs) ---------- */
+::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
+}
+
+/* ---------- Respect the system "reduce motion" setting ---------- */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
 }

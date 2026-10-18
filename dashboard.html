@@ -12,26 +12,29 @@
         <link rel="stylesheet" href="css/app.css">
     </head>
     <body>
+        <!-- Keyboard users can jump straight past the repeated sidebar -->
+        <a class="skip-link" href="#main-content">Skip to main content</a>
+
         <div class="container">
             <aside class="sidebar">
-                <h2 class="logo">FocusForge</h2>
+                <p class="logo">FocusForge</p>
                 <nav>
                     <ul>
-                        <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                        <li><a href="dashboard.html" class="active" aria-current="page">Dashboard</a></li>
                         <li><a href="tasks.html">Tasks</a></li>
                         <li><a href="habits.html">Habits</a></li>
                         <li><a href="stats.html">Stats</a></li>
                     </ul>
                 </nav>
             </aside>
-            <main class="main-content">
+            <main id="main-content" class="main-content">
 
                 <header>
                     <div class="header-text">
                         <h1>Dashboard</h1>
                         <p class="page-subtitle">A quick overview of your tasks, habits, and focus time.</p>
                     </div>
-                    <button id="darkModeToggle">🌙</button>
+                    <button id="darkModeToggle" aria-label="Switch to dark mode">🌙</button>
                 </header>
 
                 <section class="cards">

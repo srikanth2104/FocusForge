@@ -14,27 +14,30 @@
 </head>
 <body>
 
+<!-- Keyboard users can jump straight past the repeated sidebar -->
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
 <div class="container">
 
     <aside class="sidebar">
-        <h2 class="logo">FocusForge</h2>
+        <p class="logo">FocusForge</p>
         <nav>
             <ul>
                 <li><a href="dashboard.html">Dashboard</a></li>
                 <li><a href="tasks.html">Tasks</a></li>
                 <li><a href="habits.html">Habits</a></li>
-                <li><a href="stats.html" class="active">Stats</a></li>
+                <li><a href="stats.html" class="active" aria-current="page">Stats</a></li>
             </ul>
         </nav>
     </aside>
 
-    <main class="main-content">
+    <main id="main-content" class="main-content">
         <header>
             <div class="header-text">
                 <h1>Productivity Stats</h1>
                 <p class="page-subtitle">See your task, habit, and focus-time progress.</p>
             </div>
-            <button id="darkModeToggle">🌙</button>
+            <button id="darkModeToggle" aria-label="Switch to dark mode">🌙</button>
         </header>
 
         <div class="stats-summary">
@@ -45,7 +48,7 @@
             <p>Total Habit Streak: <span id="totalStreak">0</span></p>
         </div>
 
-        <canvas id="statsChart" width="400" height="200"></canvas>
+        <canvas id="statsChart" role="img" width="400" height="200"></canvas>
 
     </main>
 
