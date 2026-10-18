@@ -71,7 +71,17 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    /* Keeps the page subtitle away from the dark-mode button when the
+       header runs out of room on narrow (<= 400px) screens. On wider
+       screens space-between already spreads them out, so nothing moves. */
+    gap: var(--space-4);
     margin-bottom: var(--space-7);
+}
+
+.page-subtitle {
+    color: var(--text-secondary);
+    font-size: var(--fs-small);
+    margin-top: var(--space-1);
 }
 
 /* ---------- DASHBOARD CARDS ---------- */
@@ -107,6 +117,10 @@ header {
 .task-input input,
 .habit-input input {
     flex: 1;
+    /* Allows the field to shrink below its default intrinsic width, so on
+       very narrow screens (~375px) the Add button keeps a single line
+       instead of being squeezed until its label wraps. */
+    min-width: 0;
     padding: var(--space-3);
     border-radius: var(--radius-sm);
     border: 1px solid var(--input-border);
@@ -164,6 +178,51 @@ header {
     opacity: 0.5;
 }
 
+/* Row contents on small screens.
+   Long, unbreakable text (a pasted URL, a long single word) would
+   otherwise keep its full width, push the action buttons past the edge
+   of the row and give the whole page horizontal scrolling. The text is
+   allowed to shrink and break, while the buttons keep their natural
+   size so Complete/Delete always stay on one line. */
+.task-text,
+.habit-text {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.task-actions,
+.habit-actions {
+    flex-shrink: 0;
+}
+
+/* Small action buttons inside each task/habit row. Complete/check
+   actions use a neutral outline; delete actions use the danger
+   color so destructive actions are clearly distinguishable. */
+.task-complete-btn,
+.habit-check-btn,
+.task-delete-btn,
+.habit-delete-btn {
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: var(--fs-xs);
+    margin-left: var(--space-2);
+}
+
+.task-complete-btn:hover,
+.habit-check-btn:hover {
+    border-color: var(--color-success);
+    color: var(--color-success);
+}
+
+.task-delete-btn:hover,
+.habit-delete-btn:hover {
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+}
+
 /* ---------- POMODORO ---------- */
 .pomodoro {
     margin-top: var(--space-8);
@@ -179,8 +238,17 @@ header {
     margin: var(--space-5) 0;
 }
 
+/* Flex + wrap so that when the three controls do not fit (roughly
+   <= 500px wide) they move to a second row with a proper gap instead
+   of stacking against each other with no spacing. On wide screens the
+   gap replaces the old margin-right, so the spacing is identical. */
+.timer-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
 .timer-buttons button {
-    margin-right: var(--space-3);
     padding: var(--space-2) 14px;
     border: none;
     border-radius: var(--radius-sm);
@@ -254,10 +322,28 @@ canvas {
         height: auto;
     }
 
+    /* The sidebar itself just stacks (logo, then nav) - the nav
+       LINKS are what need to lay out horizontally on mobile, not
+       the sidebar's direct children. See ".sidebar ul" below. */
     .sidebar {
         width: 100%;
+        padding: var(--space-4);
+    }
+
+    .logo {
+        margin-bottom: var(--space-3);
+        text-align: center;
+    }
+
+    .sidebar ul {
         display: flex;
-        justify-content: space-around;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--space-2);
+    }
+
+    .sidebar ul li {
+        margin: 0;
     }
 
     .main-content {
